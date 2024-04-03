@@ -8,8 +8,8 @@ import {
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import MainLayout from "./layouts/MainLayout";
-import SignUp from "./pages/SignUp";
-import LogIn from "./pages/LogIn";
+import Signup, { signupAction } from "./pages/Signup";
+import Login, { loginAction } from "./pages/Login";
 import Classes from "./pages/Classes";
 import Students from "./pages/Students";
 import Attendance from "./pages/Attendance";
@@ -19,8 +19,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
       <Route index element={<Home />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/login" element={<LogIn />} />
+      <Route path="/signup" element={<Signup />} action={signupAction} />
+      <Route path="/login" element={<Login />} action={loginAction} />
       <Route path="/classes" element={<Classes />} />
       <Route path="/students" element={<Students />} />
       <Route path="/attendace" element={<Attendance />} />

@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { ActionFunctionArgs, Form, Link, redirect } from "react-router-dom";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const togglePassword = () => {
+  const togglePassword = (e: SyntheticEvent) => {
+    e.preventDefault();
     setShowPassword(!showPassword);
   };
+
   return (
     <div className="flex justify-center items-center">
-      <div className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full">
+      <Form
+        method="post"
+        action="/signup"
+        className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full"
+      >
         <h1 className="text-3xl font-bold self-center">Create an account</h1>
 
         <span className="self-center">
@@ -35,6 +41,8 @@ const Signup = () => {
                 type="text"
                 placeholder="First Name"
                 className="input input-bordered w-full"
+                required
+                name="firstName"
               />
             </label>
           </div>
@@ -45,6 +53,8 @@ const Signup = () => {
                 type="text"
                 placeholder="Last Name"
                 className="input input-bordered w-full"
+                required
+                name="lastName"
               />
             </label>
           </div>
@@ -55,11 +65,20 @@ const Signup = () => {
             type="email"
             placeholder="Email"
             className="input input-bordered"
+            required
+            name="email"
           />
         </label>
 
         <label className="form-control w-full">
           <div className="inline-flex items-center relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="New Password"
+              className="input input-bordered pr-11 w-full"
+              required
+              name="password"
+            />
             <button
               className="btn btn-ghost btn-sm btn-circle absolute right-0 mr-2"
               onClick={togglePassword}
@@ -70,12 +89,6 @@ const Signup = () => {
                 <FaEyeSlash className="text-lg" />
               )}
             </button>
-
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="New Password"
-              className="input input-bordered pr-11 w-full"
-            />
           </div>
         </label>
 
@@ -92,9 +105,36 @@ const Signup = () => {
         </div>
 
         <button className="btn btn-primary">Create</button>
-      </div>
+      </Form>
     </div>
   );
 };
 
-export default Signup;
+const signupAction = async ({ request }: ActionFunctionArgs) => {
+  // console.log(request);
+  const data = await request.formData();
+
+  const submission = {
+    first_name: data.get("firstName"),
+    last_name: data.get("lastName"),
+    email: data.get("email"),
+    password: data.get("password"),
+  };
+
+  // send post req
+  console.log(submission);
+  const response = await fetch("http://localhost:8080/faculty", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(submission),
+  });
+
+  const content = await response.json();
+  if (response.ok) {
+    return redirect("/login");
+  } else {
+    return redirect("/signup");
+  }
+};
+
+export { Signup as default, signupAction };

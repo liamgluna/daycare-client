@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { ActionFunctionArgs, Form, Link, redirect } from "react-router-dom";
 
-const LogIn = () => {
+const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const togglePassword = () => {
+  const togglePassword = (e: SyntheticEvent) => {
+    e.preventDefault();
     setShowPassword(!showPassword);
   };
+
   return (
     <div className="flex justify-center items-center">
-      <div className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full">
+      <Form
+        method="post"
+        action="/login"
+        className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full"
+      >
         <h1 className="text-3xl font-bold self-center">Log in</h1>
 
         <span className="self-center">
@@ -32,6 +38,8 @@ const LogIn = () => {
             type="email"
             placeholder="Email"
             className="input input-bordered"
+            required
+            name="email"
           />
         </label>
 
@@ -52,6 +60,8 @@ const LogIn = () => {
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               className="input input-bordered pr-11 w-full"
+              required
+              name="password"
             />
           </div>
         </label>
@@ -67,9 +77,35 @@ const LogIn = () => {
             Forgot password?
           </a>
         </div>
-      </div>
+      </Form>
     </div>
   );
 };
 
-export default LogIn;
+const loginAction = async ({ request }: ActionFunctionArgs) => {
+  // console.log(request);
+  const data = await request.formData();
+
+  const submission = {
+    email: data.get("email"),
+    password: data.get("password"),
+  };
+
+  // send post req
+  console.log(submission);
+  const response = await fetch("http://localhost:8080/faculty/login", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(submission),
+  });
+
+  const content = await response.json();
+  if (response.ok) {
+    return redirect("/");
+  } else {
+    return redirect("/signup");
+  }
+};
+
+export { Login as default, loginAction };
