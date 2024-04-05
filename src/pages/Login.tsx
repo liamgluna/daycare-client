@@ -17,7 +17,7 @@ const Login = () => {
         action="/login"
         className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full"
       >
-        <h1 className="text-3xl font-bold self-center">Log in</h1>
+        <h1 className="text-3xl font-bold self-center">Log In</h1>
 
         <span className="self-center">
           Don't have an account? {""}
@@ -46,6 +46,7 @@ const Login = () => {
         <label className="form-control w-full">
           <div className="inline-flex items-center relative">
             <button
+              type="button"
               className="btn btn-ghost btn-sm btn-circle absolute right-0 mr-2"
               onClick={togglePassword}
             >
@@ -71,7 +72,9 @@ const Login = () => {
             <span className="label-text">Remember me</span>
           </label>
         </div>
-        <button className="btn btn-primary">Log in</button>
+        <button type="submit" className="btn btn-primary">
+          Log in
+        </button>
         <div className="form-control self-center">
           <a href="#" className="label-text link link-accent ">
             Forgot password?

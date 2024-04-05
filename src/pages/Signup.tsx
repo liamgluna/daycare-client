@@ -80,6 +80,7 @@ const Signup = () => {
               name="password"
             />
             <button
+              type="button"
               className="btn btn-ghost btn-sm btn-circle absolute right-0 mr-2"
               onClick={togglePassword}
             >
@@ -104,7 +105,9 @@ const Signup = () => {
           </label>
         </div>
 
-        <button className="btn btn-primary">Create</button>
+        <button type="submit" className="btn btn-primary">
+          Create
+        </button>
       </Form>
     </div>
   );
