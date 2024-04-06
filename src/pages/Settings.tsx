@@ -12,7 +12,7 @@ const Settings = () => {
   const logoutHandler = async () => {
     try {
       await logoutApiCall({}).unwrap();
-      dispatch(logout({}));
+      dispatch(logout());
       navigate("/login");
     } catch (err) {
       console.error(err);
