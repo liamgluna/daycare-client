@@ -1,8 +1,36 @@
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa6";
-import { ActionFunctionArgs, Form, Link, redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  ActionFunctionArgs,
+  Link,
+  redirect,
+  useNavigate,
+} from "react-router-dom";
+import { useSignupMutation } from "../slices/facultyApiSlice";
+import { RootState } from "../store";
+import { setCredentials } from "../slices/authSlice";
+import { toast } from "react-toastify";
 
 const Signup = () => {
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [signup, { isLoading }] = useSignupMutation();
+
+  const { facultyInfo } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (facultyInfo) {
+      navigate("/");
+    }
+  }, [facultyInfo]);
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const togglePassword = (e: SyntheticEvent) => {
@@ -10,11 +38,26 @@ const Signup = () => {
     setShowPassword(!showPassword);
   };
 
+  const submit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const res = await signup({
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+      }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate("/");
+    } catch (err) {
+      toast.error("Invalid email or password");
+    }
+  };
+
   return (
     <div className="flex justify-center items-center">
-      <Form
-        method="post"
-        action="/signup"
+      <form
+        onSubmit={submit}
         className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full"
       >
         <h1 className="text-3xl font-bold self-center">Create an account</h1>
@@ -26,12 +69,10 @@ const Signup = () => {
           </Link>
         </span>
 
-        <a href="#" className="btn btn-neutral">
-          <i className="fab fa-google text-primary"></i>
+        <button disabled={isLoading} className="btn btn-neutral">
           <FaGoogle className="text-primary" />
           Create with Google
-        </a>
-
+        </button>
         <div className="divider ">OR</div>
 
         <div className="flex">
@@ -43,6 +84,7 @@ const Signup = () => {
                 className="input input-bordered w-full"
                 required
                 name="firstName"
+                onChange={(e) => setFirstName(e.target.value)}
               />
             </label>
           </div>
@@ -55,6 +97,7 @@ const Signup = () => {
                 className="input input-bordered w-full"
                 required
                 name="lastName"
+                onChange={(e) => setLastName(e.target.value)}
               />
             </label>
           </div>
@@ -67,6 +110,7 @@ const Signup = () => {
             className="input input-bordered"
             required
             name="email"
+            onChange={(e) => setEmail(e.target.value)}
           />
         </label>
 
@@ -78,6 +122,7 @@ const Signup = () => {
               className="input input-bordered pr-11 w-full"
               required
               name="password"
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="button"
@@ -105,10 +150,14 @@ const Signup = () => {
           </label>
         </div>
 
-        <button type="submit" className="btn btn-primary">
-          Create
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          {isLoading ? (
+            <span className="loading loading-spinner"></span>
+          ) : (
+            "Sign Up"
+          )}
         </button>
-      </Form>
+      </form>
     </div>
   );
 };
@@ -128,11 +177,11 @@ const signupAction = async ({ request }: ActionFunctionArgs) => {
   console.log(submission);
   const response = await fetch("http://localhost:8080/faculty", {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(submission),
   });
 
-  const content = await response.json();
   if (response.ok) {
     return redirect("/login");
   } else {

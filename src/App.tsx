@@ -8,30 +8,43 @@ import {
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import MainLayout from "./layouts/MainLayout";
-import Signup, { signupAction } from "./pages/Signup";
-import Login, { loginAction } from "./pages/Login";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 import Classes from "./pages/Classes";
 import Students from "./pages/Students";
 import Attendance from "./pages/Attendance";
 import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
+import store from "./store";
+import { Provider } from "react-redux";
+import PrivateRoute from "./components/PrivateRoute";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
       <Route index element={<Home />} />
-      <Route path="/signup" element={<Signup />} action={signupAction} />
-      <Route path="/login" element={<Login />} action={loginAction} />
-      <Route path="/classes" element={<Classes />} />
-      <Route path="/students" element={<Students />} />
-      <Route path="/attendace" element={<Attendance />} />
-      <Route path="/settings" element={<Settings />} />
+      {/* <Route path="/signup" element={<Signup />} action={signupAction} /> */}
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      {/* <Route path="/login" element={<Login />} action={loginAction} /> */}
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/classes" element={<Classes />} />
+        <Route path="/students" element={<Students />} />
+        <Route path="/attendance" element={<Attendance />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Route>
   )
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  );
 }
 
 export default App;

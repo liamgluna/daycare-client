@@ -1,20 +1,55 @@
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa6";
-import { ActionFunctionArgs, Form, Link, redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  ActionFunctionArgs,
+  Link,
+  redirect,
+  useNavigate,
+} from "react-router-dom";
+import { useLoginMutation } from "../slices/facultyApiSlice";
+import { RootState } from "../store";
+import { setCredentials } from "../slices/authSlice";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [login, { isLoading }] = useLoginMutation();
+
+  const { facultyInfo } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (facultyInfo) {
+      navigate("/");
+    }
+  }, [facultyInfo]);
 
   const togglePassword = (e: SyntheticEvent) => {
     e.preventDefault();
     setShowPassword(!showPassword);
   };
 
+  const submit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate("/");
+    } catch (err: any) {
+      toast.error("Invalid email or password");
+    }
+  };
+
   return (
     <div className="flex justify-center items-center">
-      <Form
-        method="post"
-        action="/login"
+      <form
+        onSubmit={submit}
         className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full"
       >
         <h1 className="text-3xl font-bold self-center">Log In</h1>
@@ -26,10 +61,10 @@ const Login = () => {
           </Link>
         </span>
 
-        <a href="#" className="btn btn-neutral">
+        <button disabled={isLoading} className="btn btn-neutral">
           <FaGoogle className="text-primary" />
           Log in with Google
-        </a>
+        </button>
 
         <div className="divider">OR</div>
 
@@ -40,6 +75,7 @@ const Login = () => {
             className="input input-bordered"
             required
             name="email"
+            onChange={(e) => setEmail(e.target.value)}
           />
         </label>
 
@@ -63,6 +99,7 @@ const Login = () => {
               className="input input-bordered pr-11 w-full"
               required
               name="password"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
         </label>
@@ -72,15 +109,19 @@ const Login = () => {
             <span className="label-text">Remember me</span>
           </label>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Log in
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          {isLoading ? (
+            <span className="loading loading-spinner"></span>
+          ) : (
+            "Log in"
+          )}
         </button>
         <div className="form-control self-center">
           <a href="#" className="label-text link link-accent ">
             Forgot password?
           </a>
         </div>
-      </Form>
+      </form>
     </div>
   );
 };
@@ -103,7 +144,6 @@ const loginAction = async ({ request }: ActionFunctionArgs) => {
     body: JSON.stringify(submission),
   });
 
-  const content = await response.json();
   if (response.ok) {
     return redirect("/");
   } else {
