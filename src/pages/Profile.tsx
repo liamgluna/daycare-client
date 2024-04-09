@@ -1,7 +1,7 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useSignupMutation } from "../slices/facultyApiSlice";
+import { useSignupMutation, useUpdateFacultyMutation } from "../slices/facultyApiSlice";
 import { RootState } from "../store";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
@@ -15,7 +15,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [signup, { isLoading }] = useSignupMutation();
+  const [updateFaculty, { isLoading }] = useUpdateFacultyMutation()
 
   const { facultyInfo } = useSelector((state: RootState) => state.auth);
 
@@ -29,16 +29,16 @@ const Profile = () => {
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
     try {
-      const res = await signup({
+      const res = await updateFaculty({
         first_name: firstName,
         last_name: lastName,
         contact,
         position,
       }).unwrap();
       dispatch(setCredentials({ ...res }));
-      navigate("/");
+      toast.success("Profile updated successfully");
     } catch (err) {
-      toast.error("Invalid email or password");
+      toast.error("Failed to update profile");
     }
   };
 

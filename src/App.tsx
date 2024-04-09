@@ -22,12 +22,12 @@ import PrivateRoute from "./components/PrivateRoute";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
-      <Route index element={<Home />} />
       {/* <Route path="/signup" element={<Signup />} action={signupAction} /> */}
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       {/* <Route path="/login" element={<Login />} action={loginAction} /> */}
       <Route path="" element={<PrivateRoute />}>
+        <Route index element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/classes" element={<Classes />} />
         <Route path="/students" element={<Students />} />
