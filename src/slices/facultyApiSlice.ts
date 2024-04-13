@@ -31,7 +31,14 @@ export const facultyApiSlice = apiSlice.injectEndpoints({
         body: credentials,
       }),
     }),
+    addClass: builder.mutation({
+      query: (credentials) => ({
+        url: `/classes`,
+        method: "POST",
+        body: credentials,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useSignupMutation ,useLogoutMutation, useUpdateFacultyMutation } = facultyApiSlice;
+export const { useLoginMutation, useSignupMutation ,useLogoutMutation, useUpdateFacultyMutation, useAddClassMutation } = facultyApiSlice;

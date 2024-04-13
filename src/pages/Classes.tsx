@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
+
 const Classes = () => {
   return (
     <div>
-      <h1>Classes</h1>
+      <Link to="/classes/add">Add Class</Link>
     </div>
   );
 };

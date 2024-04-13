@@ -1,7 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useSignupMutation, useUpdateFacultyMutation } from "../slices/facultyApiSlice";
+import { useUpdateFacultyMutation } from "../slices/facultyApiSlice";
 import { RootState } from "../store";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
@@ -13,9 +12,8 @@ const Profile = () => {
   const [position, setPosition] = useState<string>("");
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const [updateFaculty, { isLoading }] = useUpdateFacultyMutation()
+  const [updateFaculty, { isLoading }] = useUpdateFacultyMutation();
 
   const { facultyInfo } = useSelector((state: RootState) => state.auth);
 
