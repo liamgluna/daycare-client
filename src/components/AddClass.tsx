@@ -3,11 +3,13 @@ import { useSelector } from "react-redux";
 import { useAddClassMutation } from "../slices/facultyApiSlice"; // Importing add class mutation hook
 import { RootState } from "../store";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AddClass = () => {
   const [facultyId, setFacultyId] = useState<number | undefined>(undefined); // State for faculty ID
   const [className, setClassName] = useState<string>("");
   const [term, setTerm] = useState<string>("");
+  const navigate = useNavigate();
 
   const [addClass, { isLoading }] = useAddClassMutation(); // Mutation hook for adding a class
 
@@ -27,6 +29,7 @@ const AddClass = () => {
       }).unwrap();
       // Dispatch any necessary actions based on response
       toast.success("Class added successfully");
+      navigate("/classes");
     } catch (err) {
       toast.error("Failed to add class");
     }
