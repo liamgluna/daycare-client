@@ -6,7 +6,7 @@ export const facultyApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
-        url: `${FACULTY_URL}/login`,
+        url: `/login`,
         method: "POST",
         body: credentials,
       }),
@@ -20,7 +20,7 @@ export const facultyApiSlice = apiSlice.injectEndpoints({
     }),
     logout: builder.mutation({
       query: () => ({
-        url: `${FACULTY_URL}/logout`,
+        url: `/logout`,
         method: "POST",
       }),
     }),
