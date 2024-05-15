@@ -1,5 +1,5 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa6";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ActionFunctionArgs,
@@ -68,12 +68,6 @@ const Signup = () => {
             Log In
           </Link>
         </span>
-
-        <button disabled={isLoading} className="btn btn-neutral">
-          <FaGoogle className="text-primary" />
-          Create with Google
-        </button>
-        <div className="divider ">OR</div>
 
         <div className="flex">
           <div className="w-1/2 mr-4">

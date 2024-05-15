@@ -1,9 +1,14 @@
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { Link, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 
 const Class = () => {
   const classF = useLoaderData() as string;
 
-  return <div>id: {classF}</div>;
+  return (
+    <div>
+      <h1>id: {classF}</h1>
+      <Link to="/">Add student</Link>
+    </div>
+  );
 };
 
 export const ClassLoader = async ({ params }: LoaderFunctionArgs) => {
