@@ -8,31 +8,38 @@ const Classes = () => {
     navigate(`/classes/${id}`);
   };
   return (
-    <div>
-      <Link to="/classes/add" className="btn">
-        Add Class
-      </Link>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-        {classes.map((c) => (
-          <div
-            key={c.class_id}
-            className="card card-compact md:card lg:card bg-base-100 shadow-lg"
-          >
-            <div className="card-body items-center text-center">
-              <h2 className="card-title text-xl font-bold">
-                {c.class_name} - {c.term}
-              </h2>
-              <div className="card-actions">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => onViewClass(c.class_id)}
-                >
-                  View Class
-                </button>
+    <div className="max-w-md">
+      <div className="flex justify-between items-center my-6 px-4">
+        <h1 className="text-2xl font-bold">Classes</h1>
+        <Link to="/classes/add" className="btn">
+          Add Class
+        </Link>
+      </div>
+      <div className="px-4">
+        {classes ? (
+          classes.map((c) => (
+            <div
+              key={c.class_id}
+              className="card card-compact bg-base-100 shadow-lg my-6"
+            >
+              <div className="card-body">
+                <h2 className="card-title text-xl font-bold">
+                  {c.class_name} - {c.term}
+                </h2>
+                <div className="card-actions">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => onViewClass(c.class_id)}
+                  >
+                    View Class
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <div>No classes found</div>
+        )}
       </div>
     </div>
   );

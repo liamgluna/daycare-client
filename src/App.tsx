@@ -32,6 +32,7 @@ const router = createBrowserRouter(
         <Route path="/classes" element={<Classes />} loader={ClassesLoader} />
         <Route path="/classes/:id" element={<Class />} loader={ClassLoader} />
         <Route path="/classes/add" element={<AddClass />} />
+        <Route path="/classes/add-student" element={<AddClass />} />
         <Route path="/students" element={<Students />} />
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/settings" element={<Settings />} />
