@@ -2,15 +2,6 @@ import { useEffect, useState } from "react";
 import { LoaderFunctionArgs, useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-interface Guardian {
-  first_name: string;
-  last_name: string;
-  gender: string;
-  relationship: string;
-  occupation: string;
-  contact: string;
-}
-
 interface Student {
   student_id: number;
   first_name: string;
@@ -19,11 +10,6 @@ interface Student {
   date_of_birth: string;
   guardian_name: string;
   guardian_contact: string;
-}
-
-interface StudentData {
-  student: Student;
-  guardians: Guardian[];
 }
 
 interface Classes {
