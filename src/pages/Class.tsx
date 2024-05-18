@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { LoaderFunctionArgs, useLoaderData, useNavigate } from "react-router-dom";
+import {
+  LoaderFunctionArgs,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom";
 import { toast } from "react-toastify";
 
 interface Student {
@@ -8,7 +12,12 @@ interface Student {
   last_name: string;
   gender: string;
   date_of_birth: string;
-  guardian_name: string;
+  guardian_id: number;
+  guardian_first_name: string;
+  guardian_last_name: string;
+  guardian_gender: string;
+  guardian_rel: string;
+  guardian_occ: string;
   guardian_contact: string;
 }
 
@@ -38,6 +47,7 @@ const Class = () => {
   const classID = useLoaderData() as Classes;
   const [students, setStudents] = useState<Student[] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [newStudent, setNewStudent] = useState({
     first_name: "",
     last_name: "",
@@ -53,6 +63,7 @@ const Class = () => {
     },
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -78,11 +89,13 @@ const Class = () => {
     fetchStudents();
   }, [classID.class_id]);
 
-  const handleEdit = (id: number) => {
-    console.log(`Edit student with id: ${id}`);
+  const handleEdit = (student: Student) => {
+    setSelectedStudent(student);
+    setIsEditModalOpen(true);
   };
 
   const handleDelete = async (student_id: number) => {
+    setIsLoading(true);
     try {
       const res = await fetch(
         `http://localhost:8080/classes/${classID.class_id}/students/${student_id}`,
@@ -108,6 +121,7 @@ const Class = () => {
       console.error(error);
       // Handle error
     }
+    setIsLoading(false);
   };
 
   const handleAddStudent = async () => {
@@ -135,13 +149,13 @@ const Class = () => {
           },
         }),
       });
-  
+
       if (!createRes.ok) {
         throw new Error("Failed to create student and guardian");
       }
-  
+
       const createdStudent = await createRes.json();
-  
+
       // Add student to the class
       const addRes = await fetch(
         `http://localhost:8080/classes/${classID.class_id}/students`,
@@ -152,16 +166,16 @@ const Class = () => {
           body: JSON.stringify({ student_id: createdStudent.student_id }),
         }
       );
-  
+
       if (!addRes.ok) {
         throw new Error("Failed to add student to class");
       }
-  
+
       // Update the state to include the new student
       setStudents((prevStudents) =>
         prevStudents ? [...prevStudents, createdStudent] : [createdStudent]
       );
-  
+
       setIsModalOpen(false);
       setNewStudent({
         first_name: "",
@@ -185,7 +199,6 @@ const Class = () => {
     toast.success("Student added successfully");
     navigate("/classes/" + classID.class_id);
   };
-  
 
   return (
     <div className="container mx-auto p-4 my-4">
@@ -228,21 +241,29 @@ const Class = () => {
                     <td>{calculateAge(student.date_of_birth)}</td>
                     <td>{student.gender}</td>
                     <td>{student.date_of_birth}</td>
-                    <td>{student.guardian_name}</td>
+                    <td>
+                      {student.guardian_first_name} {student.guardian_last_name}
+                    </td>
                     <td>{student.guardian_contact}</td>
                     <td>
-                      <button
-                        className="btn btn-primary btn-sm mr-2"
-                        onClick={() => handleEdit(student.student_id)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-error btn-sm"
-                        onClick={() => handleDelete(student.student_id)}
-                      >
-                        Delete
-                      </button>
+                      {isLoading ? (
+                        <button className="loading loading-spinner"></button>
+                      ) : (
+                        <>
+                          <button
+                            className="btn btn-primary btn-sm mr-2"
+                            onClick={() => handleEdit(student)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn btn-error btn-sm"
+                            onClick={() => handleDelete(student.student_id)}
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -257,206 +278,457 @@ const Class = () => {
       )}
       {isModalOpen && (
         <div className="modal modal-open ">
-        <div className="modal-box w-full max-w-4xl">
-          <h3 className="font-bold text-lg">Add Student</h3>
-          <div className="flex space-x-4">
-            <div className="w-1/2">
-              <h4 className="font-bold">Student Information</h4>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">First Name</span>
-                </label>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  value={newStudent.first_name}
-                  onChange={(e) =>
-                    setNewStudent({ ...newStudent, first_name: e.target.value })
-                  }
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Last Name</span>
-                </label>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  value={newStudent.last_name}
-                  onChange={(e) =>
-                    setNewStudent({ ...newStudent, last_name: e.target.value })
-                  }
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Gender</span>
-                </label>
-                <select
-                  className="select select-bordered"
-                  value={newStudent.gender}
-                  onChange={(e) =>
-                    setNewStudent({ ...newStudent, gender: e.target.value })
-                  }
-                >
-                  <option value="">Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Date of Birth</span>
-                </label>
-                <input
-                  type="date"
-                  className="input input-bordered"
-                  value={newStudent.date_of_birth}
-                  onChange={(e) =>
-                    setNewStudent({
-                      ...newStudent,
-                      date_of_birth: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-            <div className="w-1/2">
-              <h4 className="font-bold">Guardian Information</h4>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">First Name</span>
-                </label>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  value={newStudent.guardian.first_name}
-                  onChange={(e) =>
-                    setNewStudent({
-                      ...newStudent,
-                      guardian: {
-                        ...newStudent.guardian,
+          <div className="modal-box w-full max-w-4xl">
+            <h3 className="font-bold text-lg">Add Student</h3>
+            <div className="flex space-x-4">
+              <div className="w-1/2">
+                <h4 className="font-bold">Student Information</h4>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">First Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={newStudent.first_name}
+                    onChange={(e) =>
+                      setNewStudent({
+                        ...newStudent,
                         first_name: e.target.value,
-                      },
-                    })
-                  }
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Last Name</span>
-                </label>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  value={newStudent.guardian.last_name}
-                  onChange={(e) =>
-                    setNewStudent({
-                      ...newStudent,
-                      guardian: {
-                        ...newStudent.guardian,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Last Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={newStudent.last_name}
+                    onChange={(e) =>
+                      setNewStudent({
+                        ...newStudent,
                         last_name: e.target.value,
-                      },
-                    })
-                  }
-                />
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Gender</span>
+                  </label>
+                  <select
+                    className="select select-bordered"
+                    value={newStudent.gender}
+                    onChange={(e) =>
+                      setNewStudent({ ...newStudent, gender: e.target.value })
+                    }
+                  >
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Date of Birth</span>
+                  </label>
+                  <input
+                    type="date"
+                    className="input input-bordered"
+                    value={newStudent.date_of_birth}
+                    onChange={(e) =>
+                      setNewStudent({
+                        ...newStudent,
+                        date_of_birth: e.target.value,
+                      })
+                    }
+                  />
+                </div>
               </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Gender</span>
-                </label>
-                <select
-                  className="select select-bordered"
-                  value={newStudent.guardian.gender}
-                  onChange={(e) =>
-                    setNewStudent({
-                      ...newStudent,
-                      guardian: {
-                        ...newStudent.guardian,
-                        gender: e.target.value,
-                      },
-                    })
-                  }
-                >
-                  <option value="">Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Relationship</span>
-                </label>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  value={newStudent.guardian.relationship}
-                  onChange={(e) =>
-                    setNewStudent({
-                      ...newStudent,
-                      guardian: {
-                        ...newStudent.guardian,
-                        relationship: e.target.value,
-                      },
-                    })
-                  }
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Occupation</span>
-                </label>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  value={newStudent.guardian.occupation}
-                  onChange={(e) =>
-                    setNewStudent({
-                      ...newStudent,
-                      guardian: {
-                        ...newStudent.guardian,
-                        occupation: e.target.value,
-                      },
-                    })
-                  }
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Contact</span>
-                </label>
-                <input
-                  type="text"
-                  className="input input-bordered"
-                  value={newStudent.guardian.contact}
-                  onChange={(e) =>
-                    setNewStudent({
-                      ...newStudent,
-                      guardian: {
-                        ...newStudent.guardian,
-                        contact: e.target.value,
-                      },
-                    })
-                  }
-                />
+              <div className="w-1/2">
+                <h4 className="font-bold">Guardian Information</h4>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">First Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={newStudent.guardian.first_name}
+                    onChange={(e) =>
+                      setNewStudent({
+                        ...newStudent,
+                        guardian: {
+                          ...newStudent.guardian,
+                          first_name: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Last Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={newStudent.guardian.last_name}
+                    onChange={(e) =>
+                      setNewStudent({
+                        ...newStudent,
+                        guardian: {
+                          ...newStudent.guardian,
+                          last_name: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Gender</span>
+                  </label>
+                  <select
+                    className="select select-bordered"
+                    value={newStudent.guardian.gender}
+                    onChange={(e) =>
+                      setNewStudent({
+                        ...newStudent,
+                        guardian: {
+                          ...newStudent.guardian,
+                          gender: e.target.value,
+                        },
+                      })
+                    }
+                  >
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Relationship</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={newStudent.guardian.relationship}
+                    onChange={(e) =>
+                      setNewStudent({
+                        ...newStudent,
+                        guardian: {
+                          ...newStudent.guardian,
+                          relationship: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Occupation</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={newStudent.guardian.occupation}
+                    onChange={(e) =>
+                      setNewStudent({
+                        ...newStudent,
+                        guardian: {
+                          ...newStudent.guardian,
+                          occupation: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Contact</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={newStudent.guardian.contact}
+                    onChange={(e) =>
+                      setNewStudent({
+                        ...newStudent,
+                        guardian: {
+                          ...newStudent.guardian,
+                          contact: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="modal-action">
-            <button className="btn btn-primary" onClick={handleAddStudent}>
-              {isLoading ? (
-                <span className="loading loading-spinner"></span>
-              ) : (
-                "Add Student"
-              )}
-            </button>
-            <button className="btn" onClick={() => setIsModalOpen(false)}>
-              Cancel
-            </button>
+            <div className="modal-action">
+              <button className="btn btn-primary" onClick={handleAddStudent}>
+                {isLoading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Add Student"
+                )}
+              </button>
+              <button className="btn" onClick={() => setIsModalOpen(false)}>
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      
+      )}
+      {isEditModalOpen && selectedStudent && (
+        <div className="modal modal-open">
+          <div className="modal-box w-full max-w-4xl">
+            <h3 className="font-bold text-lg">Edit Student</h3>
+            <div className="flex space-x-4">
+              <div className="w-1/2">
+                <h4 className="font-bold">Student Information</h4>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">First Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={selectedStudent.first_name}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        first_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Last Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={selectedStudent.last_name}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        last_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Gender</span>
+                  </label>
+                  <select
+                    className="select select-bordered"
+                    value={selectedStudent.gender}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        gender: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Date of Birth</span>
+                  </label>
+                  <input
+                    type="date"
+                    className="input input-bordered"
+                    value={selectedStudent.date_of_birth}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        date_of_birth: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="w-1/2">
+                <h4 className="font-bold">Guardian Information</h4>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">First Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={selectedStudent.guardian_first_name}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        guardian_first_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Last Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={selectedStudent.guardian_last_name}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        guardian_last_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Gender</span>
+                  </label>
+                  <select
+                    className="select select-bordered"
+                    value={selectedStudent.guardian_gender}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        guardian_gender: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Relationship</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={selectedStudent.guardian_rel}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        guardian_rel: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Occupation</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={selectedStudent.guardian_occ}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        guardian_occ: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Contact</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    value={selectedStudent.guardian_contact}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        guardian_contact: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-action">
+              <button
+                className="btn btn-primary"
+                onClick={async () => {
+                  setIsLoading(true);
+                  try {
+                    const res = await fetch(
+                      `http://localhost:8080/students/${selectedStudent.student_id}/guardian`,
+                      {
+                        method: "PATCH",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify({
+                          student: {
+                            first_name: selectedStudent.first_name,
+                            last_name: selectedStudent.last_name,
+                            gender: selectedStudent.gender,
+                            date_of_birth: selectedStudent.date_of_birth,
+                          },
+                          guardian: {
+                            first_name: selectedStudent.guardian_first_name,
+                            last_name: selectedStudent.guardian_last_name,
+                            gender: selectedStudent.guardian_gender,
+                            relationship: selectedStudent.guardian_rel,
+                            occupation: selectedStudent.guardian_occ,
+                            contact: selectedStudent.guardian_contact,
+                          },
+                        }),
+                      }
+                    );
+
+                    if (!res.ok) {
+                      throw new Error("Failed to update student and guardian");
+                    }
+
+                    const updatedStudent = await res.json();
+
+                    setStudents((prevStudents) =>
+                      prevStudents
+                        ? prevStudents.map((student) =>
+                            student.student_id === updatedStudent.student_id
+                              ? updatedStudent
+                              : student
+                          )
+                        : [updatedStudent]
+                    );
+
+                    setIsEditModalOpen(false);
+                    navigate("/classes/" + classID.class_id);
+                  } catch (error) {
+                    console.error(error);
+                    // Handle error
+                  }
+                }}
+              >
+                {isLoading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Save Changes"
+                )}
+              </button>
+              <button className="btn" onClick={() => setIsEditModalOpen(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
