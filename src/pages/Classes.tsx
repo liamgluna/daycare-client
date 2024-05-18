@@ -1,8 +1,7 @@
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import "tailwindcss/tailwind.css";
 import "daisyui/dist/full.css";
-import AddClass from "../components/AddClass";
 import { useAddClassMutation } from "../slices/facultyApiSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -45,7 +44,6 @@ const Classes = () => {
         class_name: className,
         term,
       }).unwrap();
-      // Dispatch any necessary actions based on response
       toast.success("Class added successfully");
       navigate("/classes");
     } catch (err) {
@@ -111,47 +109,6 @@ const Classes = () => {
           <div>No classes found</div>
         )}
       </div>
-      {/* {isModalOpen && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">Add Class</h3>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Class Name</span>
-              </label>
-              <input
-                type="text"
-                className="input input-bordered"
-                value={newClass.class_name}
-                onChange={(e) =>
-                  setNewClass({ ...newClass, class_name: e.target.value })
-                }
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Term</span>
-              </label>
-              <input
-                type="text"
-                className="input input-bordered"
-                value={newClass.term}
-                onChange={(e) =>
-                  setNewClass({ ...newClass, term: e.target.value })
-                }
-              />
-            </div>
-            <div className="modal-action">
-              <button className="btn btn-primary" onClick={handleAddClass}>
-                Add
-              </button>
-              <button className="btn" onClick={() => setIsModalOpen(false)}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
       {isModalOpen && (
         <div className="flex justify-center items-center modal modal-open">
           <form

@@ -66,6 +66,7 @@ const Class = () => {
       contact: "",
     },
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -124,6 +125,7 @@ const Class = () => {
   };
 
   const handleAddStudent = async () => {
+    setIsLoading(true);
     try {
       // Create student and guardian
       const createRes = await fetch(`http://localhost:8080/students`, {
@@ -456,7 +458,11 @@ const Class = () => {
           </div>
           <div className="modal-action">
             <button className="btn btn-primary" onClick={handleAddStudent}>
-              Add
+              {isLoading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                "Add Student"
+              )}
             </button>
             <button className="btn" onClick={() => setIsModalOpen(false)}>
               Cancel
