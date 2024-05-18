@@ -10,12 +10,15 @@ const MainLayout = () => {
   const { facultyInfo } = useSelector((state: RootState) => state.auth);
 
   return (
-    <div className="flex">
+    <div className="relative flex">
       {facultyInfo && <Sidebar />}
 
       {navigation.state === "loading" && (
-        <span className="loading loading-spinner loading-md"></span>
+        <div className="absolute inset-0 flex justify-center items-center z-50"> {/* Centered loading icon */}
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
       )}
+
       <div className="flex-grow">
         {navigation.state !== "loading" && <Outlet />}
       </div>

@@ -44,7 +44,7 @@ const Profile = () => {
     <div className="flex justify-center items-center">
       <form
         onSubmit={submit}
-        className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full"
+        className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full my-44 shadow-lg"
       >
         <h1 className="text-3xl font-bold self-center">Update Profile</h1>
 

@@ -39,7 +39,7 @@ const AddClass = () => {
     <div className="flex justify-center items-center">
       <form
         onSubmit={submit}
-        className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full"
+        className="flex flex-col gap-3 rounded-box bg-base-100 p-6 max-w-md w-full my-24"
       >
         <h1 className="text-3xl font-bold self-center">Add Class</h1>
 
