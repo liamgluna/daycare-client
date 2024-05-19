@@ -34,6 +34,10 @@ const Attendance = () => {
     navigate(`/attendance/${id}`);
   };
 
+  const onCheckAttendance = (id: number) => {
+    navigate(`/attendance/${id}/check`);
+  }
+
 
   return (
     <div className="max-w-md my-8">
@@ -61,6 +65,7 @@ const Attendance = () => {
                   </button>
                   <button
                     className="btn btn-warning btn-sm"
+                    onClick={() => onCheckAttendance(c.class_id)}
                   >
                     View Attendance
                   </button>

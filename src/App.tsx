@@ -21,6 +21,7 @@ import AddClass from "./components/AddClass";
 import Class, { ClassLoader } from "./pages/Class";
 import Attendance from "./pages/Attendance";
 import ClassAttendance from "./pages/ClassAttendance";
+import CheckAttendance from "./pages/CheckAttendance";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
         <Route path="/students" element={<Students />} />
         <Route path="/attendance" element={<Attendance />} loader={ClassesLoader}/>
         <Route path="/attendance/:id" element={<ClassAttendance />} loader={ClassLoader}/>
+        <Route path="/attendance/:id/check" element={<CheckAttendance />} loader={ClassLoader}/>
         <Route path="/settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<NotFound />} />

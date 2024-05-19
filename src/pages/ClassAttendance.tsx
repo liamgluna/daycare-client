@@ -44,6 +44,7 @@ const Class = () => {
   const classID = useLoaderData() as Classes;
   const [students, setStudents] = useState<Student[] | null>(null);
   const [attendance, setAttendance] = useState<{ [key: number]: boolean }>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -58,6 +59,12 @@ const Class = () => {
         if (res.ok) {
           const data = await res.json();
           setStudents(data);
+          // Initialize attendance state
+          const initialAttendance: { [key: number]: boolean } = {};
+          data.forEach((student: Student) => {
+            initialAttendance[student.student_id] = false;
+          });
+          setAttendance(initialAttendance);
         } else {
           throw new Error("Failed to fetch students");
         }
@@ -77,6 +84,7 @@ const Class = () => {
   };
 
   const handleSubmitAttendance = async () => {
+    setIsLoading(true);
     try {
       const promises = Object.keys(attendance).map(async (student_id) => {
         const isPresent = attendance[parseInt(student_id)];
@@ -99,6 +107,7 @@ const Class = () => {
       console.error(error);
       toast.error("Failed to submit attendance");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -152,7 +161,11 @@ const Class = () => {
               className="mt-4 px-4 py-2 btn btn-primary"
               onClick={handleSubmitAttendance}
             >
-              Submit Attendance
+              {isLoading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Submit Attendance"
+                )}
             </button>
           </div>
         ) : (
