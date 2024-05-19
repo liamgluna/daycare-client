@@ -12,6 +12,7 @@ interface Classes {
   faculty_id: number;
   class_name: string;
   term: string;
+  schedule: string;
 }
 
 const Classes = () => {
@@ -21,12 +22,14 @@ const Classes = () => {
   const [newClass, setNewClass] = useState({
     class_name: "",
     term: "",
+    schedule: "",
   });
 
   //add class
   const [facultyId, setFacultyId] = useState<number | undefined>(undefined); // State for faculty ID
   const [className, setClassName] = useState<string>("");
   const [term, setTerm] = useState<string>("");
+  const [schedule, setSchedule] = useState<string>("");
 
   const [addClass, { isLoading }] = useAddClassMutation(); // Mutation hook for adding a class
 
@@ -43,6 +46,7 @@ const Classes = () => {
         faculty_id: facultyId,
         class_name: className,
         term,
+        schedule,
       }).unwrap();
       toast.success("Class added successfully");
       navigate("/classes");
@@ -146,7 +150,20 @@ const Classes = () => {
                 onChange={(e) => setTerm(e.target.value)}
               />
             </label>
-
+            <label className="form-control">
+              <div className="label">
+                <span className="label-text">Schedule</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Schedule"
+                value={schedule}
+                className="input input-bordered"
+                required
+                name="term"
+                onChange={(e) => setSchedule(e.target.value)}
+              />
+            </label>
             <div className="modal-action">
               <button
                 type="submit"

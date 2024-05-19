@@ -26,6 +26,7 @@ interface Classes {
   faculty_id: number;
   class_name: string;
   term: string;
+  schedule: string;
 }
 
 const calculateAge = (dob: string) => {
@@ -207,6 +208,7 @@ const Class = () => {
         <h2 className="text-xl">ID: {classID.class_id}</h2>
         <h2 className="text-xl">Name: {classID.class_name}</h2>
         <h2 className="text-xl">Term: {classID.term}</h2>
+        <h2 className="text-xl">Schedule: {classID.schedule}</h2>
       </div>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Students</h1>
