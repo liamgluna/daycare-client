@@ -12,7 +12,6 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Classes, { ClassesLoader } from "./pages/Classes";
 import Students from "./pages/Students";
-import Attendance from "./pages/Attendance";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import store from "./store";
@@ -20,6 +19,8 @@ import { Provider } from "react-redux";
 import PrivateRoute from "./components/PrivateRoute";
 import AddClass from "./components/AddClass";
 import Class, { ClassLoader } from "./pages/Class";
+import Attendance from "./pages/Attendance";
+import ClassAttendance from "./pages/ClassAttendance";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,7 +35,8 @@ const router = createBrowserRouter(
         <Route path="/classes/add" element={<AddClass />} />
         <Route path="/classes/add-student" element={<AddClass />} />
         <Route path="/students" element={<Students />} />
-        <Route path="/attendance" element={<Attendance />} />
+        <Route path="/attendance" element={<Attendance />} loader={ClassesLoader}/>
+        <Route path="/attendance/:id" element={<ClassAttendance />} loader={ClassLoader}/>
         <Route path="/settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<NotFound />} />
