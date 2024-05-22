@@ -58,6 +58,19 @@ const CheckAttendance = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [date, setDate] = useState<string>("");
 
+  const printAttendance = (): void => {
+    const printArea: HTMLTableElement | null = document.getElementById("student-table") as HTMLTableElement;
+  
+    if (printArea) {
+      const originalContent: string = document.body.innerHTML;
+      document.body.innerHTML = printArea.outerHTML;
+      window.print();
+      document.body.innerHTML = originalContent;
+    } else {
+      console.error("Element with ID 'student-table' not found");
+    }
+  };
+
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -166,7 +179,7 @@ const CheckAttendance = () => {
           <h1 className="text-2xl font-bold">Students</h1>
           {students !== null ? (
             students.length > 0 ? (
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto" id="student-table">
                 <table className="table w-full">
                   <thead>
                     <tr>
@@ -204,6 +217,7 @@ const CheckAttendance = () => {
           )}
         </>
       )}
+      <button onClick={printAttendance} className="btn btn-primary">Print Attendance</button>
     </div>
   );
 };
