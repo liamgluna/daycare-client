@@ -146,7 +146,7 @@ const Classes = () => {
           className="btn btn-primary"
           onClick={() => setIsAddModalOpen(true)}
         >
-          Add Class
+          Create Class
         </button>
       </div>
       <div className="px-4">
@@ -158,16 +158,16 @@ const Classes = () => {
             >
               <div className="card-body">
                 <h2 className="card-title text-xl font-bold">
-                  {c.class_name} - {c.term}
+                  {c.class_name}
                 </h2>
                 <div className="form-control flex flex-col">
                   <div className="flex gap-4">
                     {c.schedule === "morning" ? (
-                      <div className="flex items-center gap-2">
-                        Schedule: AM<FaSun  />
+                      <div className="flex items-center gap-1">
+                        <p className="">Schedule: AM</p><FaSun  />
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
                         Schedule: PM<FaCloud />
                       </div>
                     )}
@@ -184,15 +184,15 @@ const Classes = () => {
                     className="btn btn-warning btn-sm"
                     onClick={() => onEditClass(c)}
                   >
-                    Edit
                     <FaPenToSquare />
+                    Edit
                   </button>
                   <button
                     className="btn btn-error btn-sm"
                     onClick={() => onDeleteClass(c)}
                   >
-                    Delete
                     <FaRegTrashCan />
+                    Delete
                   </button>
                 </div>
               </div>
@@ -227,22 +227,6 @@ const Classes = () => {
               />
             </label>
 
-            <label className="form-control">
-              <div className="label">
-                <span className="label-text">Term</span>
-              </div>
-              <input
-                type="text"
-                placeholder="Term"
-                value={newClass.term}
-                className="input input-bordered"
-                required
-                name="term"
-                onChange={(e) =>
-                  setNewClass({ ...newClass, term: e.target.value })
-                }
-              />
-            </label>
 
             <div className="form-control flex flex-col">
               <label className="label">
@@ -323,22 +307,7 @@ const Classes = () => {
               />
             </label>
 
-            <label className="form-control">
-              <div className="label">
-                <span className="label-text">Term</span>
-              </div>
-              <input
-                type="text"
-                placeholder="Term"
-                value={editClass.term}
-                className="input input-bordered"
-                required
-                name="term"
-                onChange={(e) =>
-                  setEditClass({ ...editClass, term: e.target.value })
-                }
-              />
-            </label>
+
             <div className="form-control flex flex-col">
               <label className="label">
                 <span className="label-text">Schedule</span>

@@ -5,7 +5,15 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import {
+  FaSun,
+  FaCloud,
+  FaPenToSquare,
+  FaRegTrashCan,
+  FaChild,
+} from "react-icons/fa6";
 interface Student {
   student_id: number;
   first_name: string;
@@ -44,6 +52,8 @@ const calculateAge = (dob: string) => {
 };
 
 const Class = () => {
+  const { facultyInfo } = useSelector((state: RootState) => state.auth);
+
   const navigate = useNavigate();
   const classID = useLoaderData() as Classes;
   const [students, setStudents] = useState<Student[] | null>(null);
@@ -203,65 +213,126 @@ const Class = () => {
 
   return (
     <div className="container mx-auto p-4 my-4">
-      <h1 className="text-2xl font-bold mb-4">Class Information</h1>
-      <div className="mb-4">
-        <h2 className="text-xl">ID: {classID.class_id}</h2>
-        <h2 className="text-xl">Name: {classID.class_name}</h2>
-        <h2 className="text-xl">Term: {classID.term}</h2>
-        <h2 className="text-xl">Schedule: {classID.schedule}</h2>
+      <div className="card w-2/5 bg-base-100 border ">
+        <div className="card-body">
+          <h1 className="card-title text-2xl font-bold">Class Information</h1>
+
+          <div className="flex">
+            <div className="flex-1 mr-8">
+              <h2 className="text-xl ">Class ID: {classID.class_id}</h2>
+              <h2 className="text-xl ">Name: {classID.class_name}</h2>
+            </div>
+            <div  className="flex-1">
+              <div className="flex flex-col ">
+                <div className="flex gap-2 items-center">
+                  <h2 className="text-xl">
+                    Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
+                  </h2>
+                  {classID.schedule === "morning" ? (
+                    <FaSun className="text-lg" />
+                  ) : (
+                    <FaCloud className="text-lg" />
+                  )}
+                </div>
+              </div>
+              <h2 className="text-xl">
+                Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
+              </h2>
+            </div>
+          </div>
+        </div>
       </div>
+      {/* <h1 className="text-2xl font-bold mb-4">Class Information</h1>
+      <div className="mb-4">
+        <h2 className="text-xl mb-2">Class ID: {classID.class_id}</h2>
+        <h2 className="text-xl mb-2">Name: {classID.class_name}</h2>
+        <div className="form-control flex flex-col mb-2">
+          <div className="flex gap-4 items-center">
+            <h2 className="text-xl">
+              Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
+            </h2>
+            {classID.schedule === "morning" ? (
+              <FaSun className="text-lg" />
+            ) : (
+              <FaCloud className="text-lg" />
+            )}
+          </div>
+        </div>
+        <h2 className="text-xl">
+          Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
+        </h2>
+      </div> */}
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Students</h1>
         <button
-          className="btn btn-primary"
+          className="btn btn-primary flex items-center gap-2"
           onClick={() => setIsModalOpen(true)}
         >
+          <FaChild className="text-lg" />
           Add Student
         </button>
       </div>
       {students !== null ? (
         students.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="table w-full">
+            <table className="table-auto w-full border-collapse">
               <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Age</th>
-                  <th>Gender</th>
-                  <th>Date of Birth</th>
-                  <th>Guardian</th>
-                  <th>Contact</th>
-                  <th>Actions</th>
+                <tr className="bg-gray-200">
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    ID
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Name
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Age
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Gender
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Date of Birth
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Guardian
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Contact
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {students.map((student) => (
-                  <tr key={student.student_id}>
-                    <td>{student.student_id}</td>
-                    <td>{`${student.first_name} ${student.last_name}`}</td>
-                    <td>{calculateAge(student.date_of_birth)}</td>
-                    <td>{student.gender}</td>
-                    <td>{student.date_of_birth}</td>
-                    <td>
-                      {student.guardian_first_name} {student.guardian_last_name}
+                  <tr key={student.student_id} className="hover:bg-gray-100">
+                    <td className="p-2 border">{student.student_id}</td>
+                    <td className="p-2 border">{`${student.first_name} ${student.last_name}`}</td>
+                    <td className="p-2 border">
+                      {calculateAge(student.date_of_birth)}
                     </td>
-                    <td>{student.guardian_contact}</td>
-                    <td>
+                    <td className="p-2 border">{student.gender}</td>
+                    <td className="p-2 border">{student.date_of_birth}</td>
+                    <td className="p-2 border">{`${student.guardian_first_name} ${student.guardian_last_name}`}</td>
+                    <td className="p-2 border">{student.guardian_contact}</td>
+                    <td className="p-2 border flex gap-2">
                       {isLoading ? (
-                        <button className="loading loading-spinner"></button>
+                        <button className="btn btn-sm loading">Loading</button>
                       ) : (
                         <>
                           <button
-                            className="btn btn-primary btn-sm mr-2"
+                            className="btn btn-warning btn-sm flex items-center gap-1"
                             onClick={() => handleEdit(student)}
                           >
+                            <FaPenToSquare />
                             Edit
                           </button>
                           <button
-                            className="btn btn-error btn-sm"
+                            className="btn btn-error btn-sm flex items-center gap-1"
                             onClick={() => handleDelete(student.student_id)}
                           >
+                            <FaRegTrashCan />
                             Delete
                           </button>
                         </>
@@ -273,10 +344,10 @@ const Class = () => {
             </table>
           </div>
         ) : (
-          <p>No students found</p>
+          <p className="text-center text-gray-500">No students found</p>
         )
       ) : (
-        <p>No students found</p>
+        <p className="text-center text-gray-500">No students found</p>
       )}
       {isModalOpen && (
         <div className="modal modal-open ">
