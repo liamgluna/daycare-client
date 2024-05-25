@@ -5,6 +5,7 @@ import "daisyui/dist/full.css";
 
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { FaCloud, FaSun } from "react-icons/fa6";
 
 
 interface Classes {
@@ -53,9 +54,21 @@ const Attendance = () => {
             >
               <div className="card-body">
                 <h2 className="card-title text-xl font-bold">
-                  {c.class_name} - {c.term}
+                  {c.class_name}
                 </h2>
-                <p>Schedule: {c.schedule}</p>
+                <div className="form-control flex flex-col">
+                  <div className="flex gap-4">
+                    {c.schedule === "morning" ? (
+                      <div className="flex items-center gap-1">
+                        <p className="">Schedule: AM</p><FaSun  />
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        Schedule: PM<FaCloud />
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <div className="card-actions">
                   <button
                     className="btn btn-primary btn-sm"

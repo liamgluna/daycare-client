@@ -51,12 +51,12 @@ const Sidebar = () => {
             Classes
           </NavLink>
         </li>
-        <li>
+        {/* <li>
           <NavLink to="/students">
             <FaChildren className="text-lg" />
             Students
           </NavLink>
-        </li>
+        </li> */}
         <li>
           <NavLink to="/attendance">
             <FaListUl className="text-lg" />

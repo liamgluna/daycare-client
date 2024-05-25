@@ -1,10 +1,13 @@
 import { SyntheticEvent, useEffect, useState } from "react";
+import { FaCloud, FaSun } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 import {
   LoaderFunctionArgs,
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
 import { toast } from "react-toastify";
+import { RootState } from "../store";
 
 interface Student {
   student_id: number;
@@ -59,8 +62,10 @@ const CheckAttendance = () => {
   const [date, setDate] = useState<string>("");
 
   const printAttendance = (): void => {
-    const printArea: HTMLTableElement | null = document.getElementById("student-table") as HTMLTableElement;
-  
+    const printArea: HTMLTableElement | null = document.getElementById(
+      "student-table"
+    ) as HTMLTableElement;
+
     if (printArea) {
       const originalContent: string = document.body.innerHTML;
       document.body.innerHTML = printArea.outerHTML;
@@ -92,6 +97,7 @@ const CheckAttendance = () => {
       toast.error("Failed to fetch attendance");
     } finally {
       setIsLoading(false);
+      setIsViewAttendanceModalOpen(false)
     }
   };
 
@@ -121,16 +127,89 @@ const CheckAttendance = () => {
 
   const getAttendanceStatus = (studentId: number) => {
     const record = attendance?.find((a) => a.student_id === studentId);
-    return record ? (record.present ? <p className="text-green-500">Present</p> : <p className="text-red-500">Absent</p>) : "Unknown";
+    return record ? (
+      record.present ? (
+        <p className="text-green-500">Present</p>
+      ) : (
+        <p className="text-red-500">Absent</p>
+      )
+    ) : (
+      <p className="text-yellow-500">Unknown</p>
+
+    );
   };
+  const { facultyInfo } = useSelector((state: RootState) => state.auth);
+
+  const [isViewAttendanceModalOpen, setIsViewAttendanceModalOpen] =
+    useState(false);
 
   return (
     <div className="container mx-auto p-4 my-4">
+      {/* <button
+        className="btn btn-primary"
+        onClick={() => setIsViewAttendanceModalOpen(true)}
+      >
+        View Class Attendance
+      </button>
+      {isViewAttendanceModalOpen && (
+        <div className="flex justify-center items-center modal modal-open">
+          <form
+            className="flex flex-col gap-3 rounded-box bg-base-100 p-6 max-w-md w-full my-24 modal-box"
+            onSubmit={submit}
+          >
+            <h1 className="text-2xl font-bold">View Class Attendance</h1>
+
+            <div className="flex">
+              <div className="w-1/2 mr-4">
+                <label className="form-control">
+                  <div className="label">
+                    <span className="label-text">Select Date</span>
+                  </div>
+                  <input
+                    type="date"
+                    value={date}
+                    className="input input-bordered w-full"
+                    required
+                    name="date"
+                    onChange={(e) => {
+                      setDate(e.target.value);
+                      setAttendance(null); // Clear attendance when date changes
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div className="modal-action">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "View Attendance"
+                )}
+              </button>
+              <button
+                className="btn"
+                onClick={() => setIsViewAttendanceModalOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+     
+
+
+          </form>
+        </div>
+      )} */}
       <form
         onSubmit={submit}
-        className="flex flex-col gap-3 rounded-box bg-base-100 p-6 max-w-md w-full mb-12 shadow-md"
+        className="flex flex-col gap-3 rounded-box bg-base-100 p-6 max-w-md w-96 mb-8"
       >
-        <h1 className="text-3xl font-bold self-center">View Class Attendance</h1>
+        <h1 className="text-2xl font-bold">View Class Attendance</h1>
 
         <div className="flex">
           <div className="w-1/2 mr-4">
@@ -167,57 +246,109 @@ const CheckAttendance = () => {
           </button>
         </div>
       </form>
-      <h1 className="text-2xl font-bold mb-4">Class Information</h1>
-      <div className="mb-4">
-        <h2 className="text-xl">ID: {classID.class_id}</h2>
-        <h2 className="text-xl">Name: {classID.class_name}</h2>
-        <h2 className="text-xl">Term: {classID.term}</h2>
-        <h2 className="text-xl">Schedule: {classID.schedule}</h2>
+      <div className="card w-2/5 bg-base-100 border ">
+        <div className="card-body">
+          <h1 className="card-title text-2xl font-bold">Class Information</h1>
+
+          <div className="flex">
+            <div className="flex-1 mr-8">
+              <h2 className="text-xl ">Class ID: {classID.class_id}</h2>
+              <h2 className="text-xl ">Name: {classID.class_name}</h2>
+            </div>
+            <div className="flex-1">
+              <div className="flex flex-col ">
+                <div className="flex gap-2 items-center">
+                  <h2 className="text-xl">
+                    Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
+                  </h2>
+                  {classID.schedule === "morning" ? (
+                    <FaSun className="text-lg" />
+                  ) : (
+                    <FaCloud className="text-lg" />
+                  )}
+                </div>
+              </div>
+              <h2 className="text-xl">
+                Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
+              </h2>
+            </div>
+          </div>
+        </div>
       </div>
       {attendance && (
         <>
-          <h1 className="text-2xl font-bold">Students</h1>
+        
+          <h1 className="text-2xl font-bold my-4 ml-8">Students</h1>
           {students !== null ? (
             students.length > 0 ? (
-              <div className="overflow-x-auto" id="student-table">
+              <div
+                className="table-auto w-full border-collapse"
+                id="student-table"
+              >
                 <table className="table w-full">
                   <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Age</th>
-                      <th>Gender</th>
-                      <th>Date of Birth</th>
-                      <th>Guardian</th>
-                      <th>Contact</th>
-                      <th>Status</th>
+                    <tr className="bg-gray-200">
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        ID
+                      </th>
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        Name
+                      </th>
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        Age
+                      </th>
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        Gender
+                      </th>
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        Date of Birth
+                      </th>
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        Guardian
+                      </th>
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        Contact
+                      </th>
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        Status
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {students.map((student) => (
                       <tr key={student.student_id}>
-                        <td>{student.student_id}</td>
-                        <td>{`${student.first_name} ${student.last_name}`}</td>
-                        <td>{calculateAge(student.date_of_birth)}</td>
-                        <td>{student.gender}</td>
-                        <td>{student.date_of_birth}</td>
-                        <td>{`${student.guardian_first_name} ${student.guardian_last_name}`}</td>
-                        <td>{student.guardian_contact}</td>
-                        <td>{getAttendanceStatus(student.student_id)}</td>
+                        <td className="p-2 border">{student.student_id}</td>
+                        <td className="p-2 border">{`${student.first_name} ${student.last_name}`}</td>
+                        <td className="p-2 border">
+                          {calculateAge(student.date_of_birth)}
+                        </td>
+                        <td className="p-2 border">{student.gender}</td>
+                        <td className="p-2 border">{student.date_of_birth}</td>
+                        <td className="p-2 border">{`${student.guardian_first_name} ${student.guardian_last_name}`}</td>
+                        <td className="p-2 border">
+                          {student.guardian_contact}
+                        </td>
+                        <td className="p-2 border">
+                          {getAttendanceStatus(student.student_id)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
             ) : (
-              <p>No students found</p>
+              <p className="text-center text-gray-500">No students found</p>
+
             )
           ) : (
-            <p>Loading students...</p>
+            <p className="text-center text-gray-500">No students found</p>
+
           )}
         </>
       )}
-      <button onClick={printAttendance} className="btn btn-primary">Print Attendance</button>
+      {/* <button onClick={printAttendance} className="btn btn-primary my-4">
+        Print Attendance
+      </button> */}
     </div>
   );
 };

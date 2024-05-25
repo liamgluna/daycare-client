@@ -262,10 +262,10 @@ const Class = () => {
           Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
         </h2>
       </div> */}
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Students</h1>
+      <div className="flex items-center justify-between mb-4 mt-4">
+        <h1 className="text-2xl font-bold ml-8">Students</h1>
         <button
-          className="btn btn-primary flex items-center gap-2"
+          className="btn btn-primary flex items-center gap-2 mr-8"
           onClick={() => setIsModalOpen(true)}
         >
           <FaChild className="text-lg" />
@@ -274,8 +274,8 @@ const Class = () => {
       </div>
       {students !== null ? (
         students.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="table-auto w-full border-collapse">
+          <div className="table-auto w-full border-collapse">
+            <table className="table w-full">
               <thead>
                 <tr className="bg-gray-200">
                   <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
