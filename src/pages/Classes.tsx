@@ -141,7 +141,7 @@ const Classes = () => {
   return (
     <div className="max-w-md">
       <div className="flex justify-between items-center my-6 px-4">
-        <h1 className="text-2xl font-bold">Classes</h1>
+        <h1 className="text-2xl font-bold  px-2">Classes</h1>
         <button
           className="btn btn-primary"
           onClick={() => setIsAddModalOpen(true)}

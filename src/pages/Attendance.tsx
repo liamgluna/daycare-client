@@ -43,7 +43,7 @@ const Attendance = () => {
   return (
     <div className="max-w-md my-8">
       <div className="flex justify-between items-center my-6 px-4">
-        <h1 className="text-2xl font-bold">Classes</h1>
+        <h1 className="text-2xl font-bold px-2">Attendance</h1>
       </div>
       <div className="px-4">
         {classes ? (
