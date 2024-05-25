@@ -4,12 +4,10 @@ import {
   FaChildren,
   FaListUl,
   FaUser,
-  FaGear,
   FaDoorOpen,
 } from "react-icons/fa6";
 import logo from "../assets/asdf.jpg";
 import brgylogo from "../assets/brgy.jpg";
-import Settings from "../pages/Settings";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../slices/facultyApiSlice";

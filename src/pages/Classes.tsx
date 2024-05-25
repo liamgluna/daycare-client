@@ -6,7 +6,7 @@ import { useAddClassMutation } from "../slices/facultyApiSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { toast } from "react-toastify";
-import { FaPenToSquare, FaRegTrashCan } from "react-icons/fa6";
+import { FaPenToSquare, FaRegTrashCan, FaCloud, FaSun } from "react-icons/fa6";
 
 interface Classes {
   class_id: number;
@@ -142,7 +142,10 @@ const Classes = () => {
     <div className="max-w-md">
       <div className="flex justify-between items-center my-6 px-4">
         <h1 className="text-2xl font-bold">Classes</h1>
-        <button className="btn btn-primary" onClick={() => setIsAddModalOpen(true)}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setIsAddModalOpen(true)}
+        >
           Add Class
         </button>
       </div>
@@ -157,7 +160,19 @@ const Classes = () => {
                 <h2 className="card-title text-xl font-bold">
                   {c.class_name} - {c.term}
                 </h2>
-                <p>Schedule: {c.schedule}</p>
+                <div className="form-control flex flex-col">
+                  <div className="flex gap-4">
+                    {c.schedule === "morning" ? (
+                      <div className="flex items-center gap-2">
+                        Schedule: AM<FaSun  />
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        Schedule: PM<FaCloud />
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <div className="card-actions">
                   <button
                     className="btn btn-neutral btn-sm"
@@ -228,22 +243,42 @@ const Classes = () => {
                 }
               />
             </label>
-            <label className="form-control">
-              <div className="label">
+
+            <div className="form-control flex flex-col">
+              <label className="label">
                 <span className="label-text">Schedule</span>
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    value="morning"
+                    required
+                    name="schedule"
+                    onChange={(e) =>
+                      setNewClass({ ...newClass, schedule: e.target.value })
+                    }
+                    type="radio"
+                    className="radio radio-secondary"
+                    checked={newClass.schedule === "morning"}
+                  />
+                  AM <FaSun className="" />
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    className="radio radio-secondary"
+                    value="afternoon"
+                    required
+                    name="schedule"
+                    onChange={(e) =>
+                      setNewClass({ ...newClass, schedule: e.target.value })
+                    }
+                    checked={newClass.schedule === "afternoon"}
+                  />
+                  PM <FaCloud />
+                </label>
               </div>
-              <input
-                type="text"
-                placeholder="Schedule"
-                value={newClass.schedule}
-                className="input input-bordered"
-                required
-                name="schedule"
-                onChange={(e) =>
-                  setNewClass({ ...newClass, schedule: e.target.value })
-                }
-              />
-            </label>
+            </div>
             <div className="modal-action">
               <button
                 type="submit"
@@ -304,22 +339,41 @@ const Classes = () => {
                 }
               />
             </label>
-            <label className="form-control">
-              <div className="label">
+            <div className="form-control flex flex-col">
+              <label className="label">
                 <span className="label-text">Schedule</span>
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    value="morning"
+                    required
+                    name="schedule"
+                    onChange={(e) =>
+                      setEditClass({ ...editClass, schedule: e.target.value })
+                    }
+                    type="radio"
+                    className="radio radio-secondary"
+                    checked={editClass.schedule === "morning"}
+                  />
+                  AM <FaSun />
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    className="radio radio-secondary"
+                    value="afternoon"
+                    required
+                    name="schedule"
+                    onChange={(e) =>
+                      setEditClass({ ...editClass, schedule: e.target.value })
+                    }
+                    checked={editClass.schedule === "afternoon"}
+                  />
+                  PM <FaCloud />
+                </label>
               </div>
-              <input
-                type="text"
-                placeholder="Schedule"
-                value={editClass.schedule}
-                className="input input-bordered"
-                required
-                name="schedule"
-                onChange={(e) =>
-                  setEditClass({ ...editClass, schedule: e.target.value })
-                }
-              />
-            </label>
+            </div>
             <div className="modal-action">
               <button type="submit" className="btn btn-primary">
                 {isLoading ? (
@@ -348,7 +402,7 @@ const Classes = () => {
                 <span className="loading loading-spinner"></span>
               ) : (
                 <>
-                  <button className="btn btn-error" onClick={confirmDelete}>
+                  <button className="btn btn-neutral" onClick={confirmDelete}>
                     Yes
                   </button>
                   <button
