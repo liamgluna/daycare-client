@@ -6,6 +6,7 @@ import { useAddClassMutation } from "../slices/facultyApiSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { toast } from "react-toastify";
+import { FaPenToSquare, FaRegTrashCan } from "react-icons/fa6";
 
 interface Classes {
   class_id: number;
@@ -141,7 +142,7 @@ const Classes = () => {
     <div className="max-w-md">
       <div className="flex justify-between items-center my-6 px-4">
         <h1 className="text-2xl font-bold">Classes</h1>
-        <button className="btn" onClick={() => setIsAddModalOpen(true)}>
+        <button className="btn btn-primary" onClick={() => setIsAddModalOpen(true)}>
           Add Class
         </button>
       </div>
@@ -159,7 +160,7 @@ const Classes = () => {
                 <p>Schedule: {c.schedule}</p>
                 <div className="card-actions">
                   <button
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-neutral btn-sm"
                     onClick={() => onViewClass(c.class_id)}
                   >
                     View Class
@@ -169,12 +170,14 @@ const Classes = () => {
                     onClick={() => onEditClass(c)}
                   >
                     Edit
+                    <FaPenToSquare />
                   </button>
                   <button
                     className="btn btn-error btn-sm"
                     onClick={() => onDeleteClass(c)}
                   >
                     Delete
+                    <FaRegTrashCan />
                   </button>
                 </div>
               </div>

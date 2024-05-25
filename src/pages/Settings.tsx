@@ -19,15 +19,7 @@ const Settings = () => {
     }
   };
 
-  return (
-    <div>
-      <label>Dark Mode</label>
-      <input type="checkbox" value="dark" className="toggle theme-controller" />
-      <button onClick={logoutHandler} className="btn btn-primary">
-        Logout
-      </button>
-    </div>
-  );
+  return <button onClick={logoutHandler}>Logout</button>;
 };
 
 export default Settings;

@@ -1,6 +1,8 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
+import logo from "../assets/asdf.jpg";
+import brgylogo from "../assets/brgy.jpg";
 import {
   ActionFunctionArgs,
   Link,
@@ -52,10 +54,15 @@ const Login = () => {
         onSubmit={submit}
         className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full my-44 shadow-lg"
       >
-        <h1 className="text-3xl font-bold self-center">Log In</h1>
+        <div className="flex justify-center items-center gap-4">
+          <img src={brgylogo} alt="" className="w-32 h-32" />{" "}
+          <img src={logo} alt="" className="w-32 h-32" />{" "}
+        </div>
+        <h1 className="text-2xl font-bold self-center my-1">Daycare Management System</h1>
+        <h1 className="text-2xl font-bold self-center">Log In</h1>
 
         <span className="self-center">
-          Don't have an account? {""}
+          Don't have an account?{" "}
           <Link to="/signup" className="link link-secondary">
             Register
           </Link>
@@ -96,12 +103,12 @@ const Login = () => {
             />
           </div>
         </label>
-        <div className="form-control">
-          <label className="cursor-pointer label self-start gap-2">
-            <input type="checkbox" className="checkbox" />
-            <span className="label-text">Remember me</span>
-          </label>
-        </div>
+        {/* <div className="form-control">
+      <label className="cursor-pointer label self-start gap-2">
+        <input type="checkbox" className="checkbox" />
+        <span className="label-text">Remember me</span>
+      </label>
+    </div> */}
         <button type="submit" className="btn btn-primary" disabled={isLoading}>
           {isLoading ? (
             <span className="loading loading-spinner"></span>
@@ -110,9 +117,9 @@ const Login = () => {
           )}
         </button>
         <div className="form-control self-center">
-          <a href="#" className="label-text link link-accent ">
-            Forgot password?
-          </a>
+          {/* <a href="#" className="label-text link link-accent ">
+        Forgot password?
+      </a> */}
         </div>
       </form>
     </div>

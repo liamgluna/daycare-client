@@ -11,6 +11,8 @@ import { useSignupMutation } from "../slices/facultyApiSlice";
 import { RootState } from "../store";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
+import logo from "../assets/asdf.jpg";
+import brgylogo from "../assets/brgy.jpg";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -60,7 +62,14 @@ const Signup = () => {
         onSubmit={submit}
         className="flex flex-col gap-3 rounded-box bg-base-200 p-6 max-w-md w-full my-44 shadow-lg"
       >
-        <h1 className="text-3xl font-bold self-center">Create an account</h1>
+        <div className="flex justify-center items-center gap-4">
+          <img src={brgylogo} alt="" className="w-32 h-32" />{" "}
+          <img src={logo} alt="" className="w-32 h-32" />{" "}
+        </div>
+        <h1 className="text-2xl font-bold self-center my-1">
+          Daycare Management System
+        </h1>
+        <h1 className="text-2xl font-bold self-center">Create an account</h1>
 
         <span className="self-center">
           Already have an account? {""}
@@ -132,7 +141,7 @@ const Signup = () => {
           </div>
         </label>
 
-        <div className="form-control">
+        {/* <div className="form-control">
           <label className="cursor-pointer label self-start gap-2">
             <input type="checkbox" className="checkbox" />
             <span className="label-text">
@@ -142,7 +151,7 @@ const Signup = () => {
               </a>
             </span>
           </label>
-        </div>
+        </div> */}
 
         <button type="submit" className="btn btn-primary" disabled={isLoading}>
           {isLoading ? (
