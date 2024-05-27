@@ -278,7 +278,7 @@ const CheckAttendance = () => {
       {attendance && (
         <>
         
-          <h1 className="text-2xl font-bold my-4 ml-8">Students</h1>
+          <h1 className="text-2xl font-bold my-4 ml-4 mb-6">Students</h1>
           {students !== null ? (
             students.length > 0 ? (
               <div

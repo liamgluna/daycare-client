@@ -44,56 +44,9 @@ const Home = () => {
   }, [faculty_id]);
 
   return (
-    <div className="w-full px-4 mx-2">
+    <div className="max-w-full px-4">
       <div className="flex justify-between items-start">
-        <div>
-          {" "}
-          <div className="my-8">
-            <h1 className="text-2xl font-bold">Dashboard</h1>
-          </div>
-          <div className="p-4 rounded-lg shadow-lg flex items-center justify-between w-3/4 my-6">
-            <div>
-              <h2 className="card-title text-xl font-bold">Classes</h2>
-              <p className="text-xl text-gray-900 font-semibold">
-                {isLoading ? (
-                  <span className="loading loading-spinner"></span>
-                ) : (
-                  numClasses
-                )}
-              </p>
-            </div>
-            <FaChildren className="text-blue-500 text-5xl" />
-          </div>
-          <div className="p-4 rounded-lg shadow-lg flex items-center justify-between w-3/4 my-6">
-            <div>
-              <h2 className="card-title text-xl font-bold">Students</h2>
-              <p className="text-xl text-gray-900 font-semibold">
-                {" "}
-                {isLoading ? (
-                  <span className="loading loading-spinner"></span>
-                ) : (
-                  numStudents
-                )}
-              </p>
-            </div>
-            <FaSchoolFlag className="text-yellow-500 text-5xl" />
-          </div>
-          <div className="p-4 rounded-lg shadow-lg flex items-center justify-between w-3/4 my-6">
-            <div>
-              <h2 className="card-title text-xl font-bold">
-                Total Student Attendance
-              </h2>
-              <p className="text-xl text-gray-900 font-semibold">
-                {isLoading ? (
-                  <span className="loading loading-spinner"></span>
-                ) : (
-                  numAttendance
-                )}
-              </p>
-            </div>
-            <FaClipboard className="text-violet-500 text-5xl" />
-          </div>
-        </div>
+        <div>{/* here */}</div>
         <div className="my-4">
           <Time />
         </div>

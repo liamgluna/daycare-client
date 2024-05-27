@@ -9,6 +9,7 @@ import {
 import { toast } from "react-toastify";
 import { RootState } from "../store";
 import { useSelector } from "react-redux";
+import Time from "../components/Time";
 
 interface Student {
   student_id: number;
@@ -121,53 +122,114 @@ const Class = () => {
     }
     setIsLoading(false);
   };
+  type NewType = Intl.DateTimeFormatOptions;
+
+  const [currentTime, setCurrentTime] = useState(() => {
+    const now = new Date();
+
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    } as NewType;
+    return `${now.toLocaleDateString(
+      undefined,
+      options
+    )} ${now.toLocaleTimeString()}`; // Combined format with day
+  });
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      } as NewType;
+      setCurrentTime(
+        `${now.toLocaleDateString(
+          undefined,
+          options
+        )} ${now.toLocaleTimeString()}`
+      ); // Update time with day
+    }, 1000);
+
+    // Cleanup function to clear the interval on unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
-    <div className="container mx-auto p-4 my-4">
-       <div className="card w-2/5 bg-base-100 border ">
-        <div className="card-body">
-          <h1 className="card-title text-2xl font-bold">Class Information</h1>
-
-          <div className="flex">
-            <div className="flex-1 mr-8">
-              <h2 className="text-xl ">Class ID: {classID.class_id}</h2>
-              <h2 className="text-xl ">Name: {classID.class_name}</h2>
-            </div>
-            <div  className="flex-1">
-              <div className="flex flex-col ">
-                <div className="flex gap-2 items-center">
-                  <h2 className="text-xl">
-                    Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
-                  </h2>
-                  {classID.schedule === "morning" ? (
-                    <FaSun className="text-lg" />
-                  ) : (
-                    <FaCloud className="text-lg" />
-                  )}
-                </div>
+    <div className="container mx-auto px-4 my-4">
+      <div className="w-full  mx-2">
+      <div className="flex justify-between items-start ">
+        <div className="card w-2/5 bg-base-100 border my-4">
+          <div className="card-body">
+            <h1 className="card-title text-2xl font-bold">Class Information</h1>
+            <div className="flex">
+              <div className="flex-1 mr-8">
+                <h2 className="text-xl">Class ID: {classID.class_id}</h2>
+                <h2 className="text-xl">Name: {classID.class_name}</h2>
               </div>
-              <h2 className="text-xl">
-                Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
-              </h2>
+              <div className="flex-1">
+                <div className="flex flex-col">
+                  <div className="flex gap-2 items-center">
+                    <h2 className="text-xl">
+                      Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
+                    </h2>
+                    {classID.schedule === "morning" ? (
+                      <FaSun className="text-lg" />
+                    ) : (
+                      <FaCloud className="text-lg" />
+                    )}
+                  </div>
+                </div>
+                <h2 className="text-xl">
+                  Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
+                </h2>
+              </div>
             </div>
           </div>
         </div>
+        <div className="">
+          <Time />
+        </div>
       </div>
-      <h1 className="text-2xl font-bold mb-4 ml-8 mt-4">Students</h1>
+      </div>
+
+
+      <h1 className="text-2xl font-bold mb-4 ml-4 mt-6">Students</h1>
       {students !== null ? (
         students.length > 0 ? (
           <div className="table-auto w-full border-collapse">
             <table className="table w-full">
               <thead>
                 <tr className="bg-gray-200">
-                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">ID</th>
-                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">Name</th>
-                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">Age</th>
-                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">Gender</th>
-                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">Date of Birth</th>
-                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">Guardian</th>
-                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">Contact</th>
-                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">Attendance</th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    ID
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Name
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Age
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Gender
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Date of Birth
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Guardian
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Contact
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Attendance
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -175,7 +237,9 @@ const Class = () => {
                   <tr key={student.student_id}>
                     <td className="p-2 border">{student.student_id}</td>
                     <td className="p-2 border">{`${student.first_name} ${student.last_name}`}</td>
-                    <td className="p-2 border">{calculateAge(student.date_of_birth)}</td>
+                    <td className="p-2 border">
+                      {calculateAge(student.date_of_birth)}
+                    </td>
                     <td className="p-2 border">{student.gender}</td>
                     <td className="p-2 border">{student.date_of_birth}</td>
                     <td className="p-2 border">{`${student.guardian_first_name} ${student.guardian_last_name}`}</td>
@@ -194,7 +258,7 @@ const Class = () => {
               </tbody>
             </table>
             <button
-              className="mt-4 px-4 py-2 btn btn-primary mx-4"
+              className="mt-4 px-4 py-2 btn btn-primary "
               onClick={handleSubmitAttendance}
             >
               {isLoading ? (
@@ -206,11 +270,9 @@ const Class = () => {
           </div>
         ) : (
           <p className="text-center text-gray-500">No students found</p>
-
         )
       ) : (
         <p className="text-center text-gray-500">No students found</p>
-
       )}
     </div>
   );

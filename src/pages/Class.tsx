@@ -14,6 +14,7 @@ import {
   FaRegTrashCan,
   FaChild,
 } from "react-icons/fa6";
+import Time from "../components/Time";
 interface Student {
   student_id: number;
   first_name: string;
@@ -212,8 +213,11 @@ const Class = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 my-4">
-      <div className="card w-2/5 bg-base-100 border ">
+    <div className="container mx-auto">
+
+      <div className="w-full px-4 mx-2">
+      <div className="flex justify-between items-start">
+      <div className="card w-2/5 bg-base-100 border my-8">
         <div className="card-body">
           <h1 className="card-title text-2xl font-bold">Class Information</h1>
 
@@ -242,27 +246,12 @@ const Class = () => {
           </div>
         </div>
       </div>
-      {/* <h1 className="text-2xl font-bold mb-4">Class Information</h1>
-      <div className="mb-4">
-        <h2 className="text-xl mb-2">Class ID: {classID.class_id}</h2>
-        <h2 className="text-xl mb-2">Name: {classID.class_name}</h2>
-        <div className="form-control flex flex-col mb-2">
-          <div className="flex gap-4 items-center">
-            <h2 className="text-xl">
-              Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
-            </h2>
-            {classID.schedule === "morning" ? (
-              <FaSun className="text-lg" />
-            ) : (
-              <FaCloud className="text-lg" />
-            )}
-          </div>
+        <div className="my-4">
+          <Time />
         </div>
-        <h2 className="text-xl">
-          Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
-        </h2>
-      </div> */}
-      <div className="flex items-center justify-between mb-4 mt-4">
+      </div>
+    </div>
+      <div className="flex items-center justify-between mb-4 ">
         <h1 className="text-2xl font-bold ml-8">Students</h1>
         <button
           className="btn btn-primary flex items-center gap-2 mr-8"
@@ -274,7 +263,7 @@ const Class = () => {
       </div>
       {students !== null ? (
         students.length > 0 ? (
-          <div className="table-auto w-full border-collapse">
+          <div className="table-auto w-full border-collapse px-4">
             <table className="table w-full">
               <thead>
                 <tr className="bg-gray-200">
@@ -364,6 +353,7 @@ const Class = () => {
                     type="text"
                     className="input input-bordered"
                     value={newStudent.first_name}
+                    required
                     onChange={(e) =>
                       setNewStudent({
                         ...newStudent,
@@ -380,6 +370,7 @@ const Class = () => {
                     type="text"
                     className="input input-bordered"
                     value={newStudent.last_name}
+                    required
                     onChange={(e) =>
                       setNewStudent({
                         ...newStudent,
@@ -394,6 +385,7 @@ const Class = () => {
                   </label>
                   <select
                     className="select select-bordered"
+                    required
                     value={newStudent.gender}
                     onChange={(e) =>
                       setNewStudent({ ...newStudent, gender: e.target.value })
@@ -410,6 +402,7 @@ const Class = () => {
                   </label>
                   <input
                     type="date"
+                    required
                     className="input input-bordered"
                     value={newStudent.date_of_birth}
                     onChange={(e) =>
@@ -429,6 +422,7 @@ const Class = () => {
                   </label>
                   <input
                     type="text"
+                    required
                     className="input input-bordered"
                     value={newStudent.guardian.first_name}
                     onChange={(e) =>
@@ -448,6 +442,7 @@ const Class = () => {
                   </label>
                   <input
                     type="text"
+                    required
                     className="input input-bordered"
                     value={newStudent.guardian.last_name}
                     onChange={(e) =>
@@ -467,6 +462,7 @@ const Class = () => {
                   </label>
                   <select
                     className="select select-bordered"
+                    required
                     value={newStudent.guardian.gender}
                     onChange={(e) =>
                       setNewStudent({
@@ -489,6 +485,7 @@ const Class = () => {
                   </label>
                   <input
                     type="text"
+                    required
                     className="input input-bordered"
                     value={newStudent.guardian.relationship}
                     onChange={(e) =>
@@ -508,6 +505,7 @@ const Class = () => {
                   </label>
                   <input
                     type="text"
+                    required
                     className="input input-bordered"
                     value={newStudent.guardian.occupation}
                     onChange={(e) =>
@@ -527,6 +525,7 @@ const Class = () => {
                   </label>
                   <input
                     type="text"
+                    required
                     className="input input-bordered"
                     value={newStudent.guardian.contact}
                     onChange={(e) =>
