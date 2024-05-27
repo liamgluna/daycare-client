@@ -163,41 +163,42 @@ const Class = () => {
   return (
     <div className="container mx-auto px-4 my-4">
       <div className="w-full  mx-2">
-      <div className="flex justify-between items-start ">
-        <div className="card w-2/5 bg-base-100 border my-4">
-          <div className="card-body">
-            <h1 className="card-title text-2xl font-bold">Class Information</h1>
-            <div className="flex">
-              <div className="flex-1 mr-8">
-                <h2 className="text-xl">Class ID: {classID.class_id}</h2>
-                <h2 className="text-xl">Name: {classID.class_name}</h2>
-              </div>
-              <div className="flex-1">
-                <div className="flex flex-col">
-                  <div className="flex gap-2 items-center">
-                    <h2 className="text-xl">
-                      Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
-                    </h2>
-                    {classID.schedule === "morning" ? (
-                      <FaSun className="text-lg" />
-                    ) : (
-                      <FaCloud className="text-lg" />
-                    )}
-                  </div>
+        <div className="flex justify-between items-start ">
+          <div className="card w-2/5 bg-base-100 border my-4">
+            <div className="card-body">
+              <h1 className="card-title text-2xl font-bold">
+                Class Information
+              </h1>
+              <div className="flex">
+                <div className="flex-1 mr-8">
+                  <h2 className="text-xl">Class ID: {classID.class_id}</h2>
+                  <h2 className="text-xl">Name: {classID.class_name}</h2>
                 </div>
-                <h2 className="text-xl">
-                  Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
-                </h2>
+                <div className="flex-1">
+                  <div className="flex flex-col">
+                    <div className="flex gap-2 items-center">
+                      <h2 className="text-xl">
+                        Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
+                      </h2>
+                      {classID.schedule === "morning" ? (
+                        <FaSun className="text-lg" />
+                      ) : (
+                        <FaCloud className="text-lg" />
+                      )}
+                    </div>
+                  </div>
+                  <h2 className="text-xl">
+                    Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
+                  </h2>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="">
-          <Time />
+          <div className="">
+            <Time />
+          </div>
         </div>
       </div>
-      </div>
-
 
       <h1 className="text-2xl font-bold mb-4 ml-4 mt-6">Students</h1>
       {students !== null ? (
@@ -225,6 +226,12 @@ const Class = () => {
                     Guardian
                   </th>
                   <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Relationship
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Occupation
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
                     Contact
                   </th>
                   <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
@@ -243,6 +250,8 @@ const Class = () => {
                     <td className="p-2 border">{student.gender}</td>
                     <td className="p-2 border">{student.date_of_birth}</td>
                     <td className="p-2 border">{`${student.guardian_first_name} ${student.guardian_last_name}`}</td>
+                    <td className="p-2 border">{student.guardian_rel}</td>
+                    <td className="p-2 border">{student.guardian_occ}</td>
                     <td className="p-2 border">{student.guardian_contact}</td>
                     <td className="p-2 border">
                       <input

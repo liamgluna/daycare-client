@@ -259,6 +259,12 @@ const CheckAttendance = () => {
                         Guardian
                       </th>
                       <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        Relationship
+                      </th>
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                        Occupation
+                      </th>
+                      <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
                         Contact
                       </th>
                       <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
@@ -277,6 +283,8 @@ const CheckAttendance = () => {
                         <td className="p-2 border">{student.gender}</td>
                         <td className="p-2 border">{student.date_of_birth}</td>
                         <td className="p-2 border">{`${student.guardian_first_name} ${student.guardian_last_name}`}</td>
+                        <td className="p-2 border">{student.guardian_rel}</td>
+                        <td className="p-2 border">{student.guardian_occ}</td>
                         <td className="p-2 border">
                           {student.guardian_contact}
                         </td>

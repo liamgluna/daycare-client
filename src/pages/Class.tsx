@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import {
   LoaderFunctionArgs,
   useLoaderData,
@@ -136,7 +136,8 @@ const Class = () => {
     setIsLoading(false);
   };
 
-  const handleAddStudent = async () => {
+  const handleAddStudent = async (e: SyntheticEvent) => {
+    e.preventDefault();
     setIsLoading(true);
     try {
       // Create student and guardian
@@ -214,43 +215,44 @@ const Class = () => {
 
   return (
     <div className="container mx-auto">
-
       <div className="w-full px-4 mx-2">
-      <div className="flex justify-between items-start">
-      <div className="card w-2/5 bg-base-100 border my-8">
-        <div className="card-body">
-          <h1 className="card-title text-2xl font-bold">Class Information</h1>
+        <div className="flex justify-between items-start">
+          <div className="card w-2/5 bg-base-100 border my-8">
+            <div className="card-body">
+              <h1 className="card-title text-2xl font-bold">
+                Class Information
+              </h1>
 
-          <div className="flex">
-            <div className="flex-1 mr-8">
-              <h2 className="text-xl ">Class ID: {classID.class_id}</h2>
-              <h2 className="text-xl ">Name: {classID.class_name}</h2>
-            </div>
-            <div  className="flex-1">
-              <div className="flex flex-col ">
-                <div className="flex gap-2 items-center">
+              <div className="flex">
+                <div className="flex-1 mr-8">
+                  <h2 className="text-xl ">Class ID: {classID.class_id}</h2>
+                  <h2 className="text-xl ">Name: {classID.class_name}</h2>
+                </div>
+                <div className="flex-1">
+                  <div className="flex flex-col ">
+                    <div className="flex gap-2 items-center">
+                      <h2 className="text-xl">
+                        Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
+                      </h2>
+                      {classID.schedule === "morning" ? (
+                        <FaSun className="text-lg" />
+                      ) : (
+                        <FaCloud className="text-lg" />
+                      )}
+                    </div>
+                  </div>
                   <h2 className="text-xl">
-                    Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
+                    Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
                   </h2>
-                  {classID.schedule === "morning" ? (
-                    <FaSun className="text-lg" />
-                  ) : (
-                    <FaCloud className="text-lg" />
-                  )}
                 </div>
               </div>
-              <h2 className="text-xl">
-                Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
-              </h2>
             </div>
+          </div>
+          <div className="my-4">
+            <Time />
           </div>
         </div>
       </div>
-        <div className="my-4">
-          <Time />
-        </div>
-      </div>
-    </div>
       <div className="flex items-center justify-between mb-4 ">
         <h1 className="text-2xl font-bold ml-8">Students</h1>
         <button
@@ -286,6 +288,12 @@ const Class = () => {
                     Guardian
                   </th>
                   <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Relationship
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
+                    Occupation
+                  </th>
+                  <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
                     Contact
                   </th>
                   <th className="px-4 py-2 text-left text-md  text-gray-500 uppercase tracking-wider border">
@@ -304,6 +312,8 @@ const Class = () => {
                     <td className="p-2 border">{student.gender}</td>
                     <td className="p-2 border">{student.date_of_birth}</td>
                     <td className="p-2 border">{`${student.guardian_first_name} ${student.guardian_last_name}`}</td>
+                    <td className="p-2 border">{student.guardian_rel}</td>
+                    <td className="p-2 border">{student.guardian_occ}</td>
                     <td className="p-2 border">{student.guardian_contact}</td>
                     <td className="p-2 border flex gap-2">
                       {isLoading ? (
@@ -340,7 +350,10 @@ const Class = () => {
       )}
       {isModalOpen && (
         <div className="modal modal-open ">
-          <div className="modal-box w-full max-w-4xl">
+          <form
+            onSubmit={handleAddStudent}
+            className="modal-box w-full max-w-4xl"
+          >
             <h3 className="font-bold text-lg">Add Student</h3>
             <div className="flex space-x-4">
               <div className="w-1/2">
@@ -542,7 +555,7 @@ const Class = () => {
               </div>
             </div>
             <div className="modal-action">
-              <button className="btn btn-primary" onClick={handleAddStudent}>
+              <button className="btn btn-primary" type="submit">
                 {isLoading ? (
                   <span className="loading loading-spinner"></span>
                 ) : (
@@ -553,7 +566,7 @@ const Class = () => {
                 Cancel
               </button>
             </div>
-          </div>
+          </form>
         </div>
       )}
       {isEditModalOpen && selectedStudent && (
