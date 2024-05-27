@@ -207,7 +207,7 @@ const CheckAttendance = () => {
       )} */}
       <form
         onSubmit={submit}
-        className="flex flex-col gap-3 rounded-box bg-base-100 p-6 max-w-md w-96 mb-8"
+        className="flex flex-col gap-3 rounded-box bg-base-100 p-6 max-w-md w-96 mb-4"
       >
         <h1 className="text-2xl font-bold">View Class Attendance</h1>
 
