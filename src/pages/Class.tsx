@@ -354,10 +354,10 @@ const Class = () => {
             onSubmit={handleAddStudent}
             className="modal-box w-full max-w-4xl"
           >
-            <h3 className="font-bold text-lg">Add Student</h3>
+            <h3 className="font-bold text-2xl">Add Student</h3>
             <div className="flex space-x-4">
               <div className="w-1/2">
-                <h4 className="font-bold">Student Information</h4>
+                <h4 className="font-bold text-xl">Student Information</h4>
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">First Name</span>
@@ -428,7 +428,7 @@ const Class = () => {
                 </div>
               </div>
               <div className="w-1/2">
-                <h4 className="font-bold">Guardian Information</h4>
+                <h4 className="font-bold text-xl">Guardian Information</h4>
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">First Name</span>
