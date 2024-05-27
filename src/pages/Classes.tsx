@@ -145,7 +145,7 @@ const Classes = () => {
         <div>
           <div className="max-w-md">
             <div className="flex justify-between items-center my-6 px-4">
-              <h1 className="text-2xl font-bold   mr-24">Classes</h1>
+              <h1 className="text-2xl font-bold mr-28">Classes</h1>
               <button
                 className="btn btn-primary "
                 onClick={() => setIsAddModalOpen(true)}
@@ -205,7 +205,9 @@ const Classes = () => {
                   </div>
                 ))
               ) : (
-                <div className="text-center text-gray-500">No classes found</div>
+                <div className="text-center text-gray-500 mr-6">
+                  No classes found
+                </div>
               )}
             </div>
             {isAddModalOpen && (

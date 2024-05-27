@@ -97,7 +97,7 @@ const CheckAttendance = () => {
       toast.error("Failed to fetch attendance");
     } finally {
       setIsLoading(false);
-      setIsViewAttendanceModalOpen(false)
+      setIsViewAttendanceModalOpen(false);
     }
   };
 
@@ -135,7 +135,6 @@ const CheckAttendance = () => {
       )
     ) : (
       <p className="text-yellow-500">Unknown</p>
-
     );
   };
   const { facultyInfo } = useSelector((state: RootState) => state.auth);
@@ -145,25 +144,21 @@ const CheckAttendance = () => {
 
   return (
     <div className="container mx-auto p-4 my-4">
-      {/* <button
-        className="btn btn-primary"
-        onClick={() => setIsViewAttendanceModalOpen(true)}
-      >
-        View Class Attendance
-      </button>
-      {isViewAttendanceModalOpen && (
-        <div className="flex justify-center items-center modal modal-open">
+      <div className="flex justify-start items-start">
+        <div>
           <form
-            className="flex flex-col gap-3 rounded-box bg-base-100 p-6 max-w-md w-full my-24 modal-box"
             onSubmit={submit}
+            className="flex flex-col gap-3 rounded-box bg-base-100 p-6 max-w-md w-96 mb-4 border mr-12 ml-2"
           >
-            <h1 className="text-2xl font-bold">View Class Attendance</h1>
+            <h1 className="text-2xl font-bold mt-2">View Class Attendance</h1>
 
             <div className="flex">
               <div className="w-1/2 mr-4">
                 <label className="form-control">
                   <div className="label">
-                    <span className="label-text">Select Date</span>
+                    <span className="label-text text-gray-500">
+                      Select Date
+                    </span>
                   </div>
                   <input
                     type="date"
@@ -180,7 +175,7 @@ const CheckAttendance = () => {
               </div>
             </div>
 
-            <div className="modal-action">
+            <div>
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -192,97 +187,54 @@ const CheckAttendance = () => {
                   "View Attendance"
                 )}
               </button>
-              <button
-                className="btn"
-                onClick={() => setIsViewAttendanceModalOpen(false)}
-              >
-                Cancel
-              </button>
             </div>
-     
-
-
           </form>
         </div>
-      )} */}
-      <form
-        onSubmit={submit}
-        className="flex flex-col gap-3 rounded-box bg-base-100 p-6 max-w-md w-96 mb-4"
-      >
-        <h1 className="text-2xl font-bold">View Class Attendance</h1>
-
-        <div className="flex">
-          <div className="w-1/2 mr-4">
-            <label className="form-control">
-              <div className="label">
-                <span className="label-text">Select Date</span>
-              </div>
-              <input
-                type="date"
-                value={date}
-                className="input input-bordered w-full"
-                required
-                name="date"
-                onChange={(e) => {
-                  setDate(e.target.value);
-                  setAttendance(null); // Clear attendance when date changes
-                }}
-              />
-            </label>
-          </div>
-        </div>
-
         <div>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <span className="loading loading-spinner"></span>
-            ) : (
-              "View Attendance"
-            )}
-          </button>
-        </div>
-      </form>
-      <div className="card w-2/5 bg-base-100 border ">
-        <div className="card-body">
-          <h1 className="card-title text-2xl font-bold">Class Information</h1>
+          <div className="card w-full bg-base-100 border ">
+            <div className="card-body">
+              <h1 className="card-title text-2xl font-bold">
+                Class Information
+              </h1>
 
-          <div className="flex">
-            <div className="flex-1 mr-8">
-              <h2 className="text-xl ">Class ID: {classID.class_id}</h2>
-              <h2 className="text-xl ">Name: {classID.class_name}</h2>
-            </div>
-            <div className="flex-1">
-              <div className="flex flex-col ">
-                <div className="flex gap-2 items-center">
+              <div className="flex">
+                <div className="flex-1 mr-8">
+                  <h2 className="text-xl ">Class ID: {classID.class_id}</h2>
+                  <h2 className="text-xl ">Name: {classID.class_name}</h2>
+                </div>
+                <div className="flex-1">
+                  <div className="flex flex-col ">
+                    <div className="flex gap-2 items-center">
+                      <h2 className="text-xl">
+                        Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
+                      </h2>
+                      {classID.schedule === "morning" ? (
+                        <FaSun className="text-lg" />
+                      ) : (
+                        <FaCloud className="text-lg" />
+                      )}
+                    </div>
+                  </div>
                   <h2 className="text-xl">
-                    Schedule: {classID.schedule === "morning" ? "AM" : "PM"}
+                    Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
                   </h2>
-                  {classID.schedule === "morning" ? (
-                    <FaSun className="text-lg" />
-                  ) : (
-                    <FaCloud className="text-lg" />
-                  )}
                 </div>
               </div>
-              <h2 className="text-xl">
-                Faculty: {facultyInfo.first_name} {facultyInfo.last_name}
-              </h2>
             </div>
           </div>
         </div>
       </div>
       {attendance && (
         <>
-        
-          <h1 className="text-2xl font-bold my-4 ml-4 mb-6">Students</h1>
+          <h1 className="text-2xl font-bold mt-6 ml-4 ">Students</h1>
+          <h1 className="text-lg font-bold ml-4 mb-2 text-gray-600">
+            Class Date: {date}
+          </h1>
+
           {students !== null ? (
             students.length > 0 ? (
               <div
-                className="table-auto w-full border-collapse"
+                className="table-auto w-full border-collapse mt-2"
                 id="student-table"
               >
                 <table className="table w-full">
@@ -338,11 +290,9 @@ const CheckAttendance = () => {
               </div>
             ) : (
               <p className="text-center text-gray-500">No students found</p>
-
             )
           ) : (
             <p className="text-center text-gray-500">No students found</p>
-
           )}
         </>
       )}

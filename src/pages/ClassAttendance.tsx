@@ -202,7 +202,7 @@ const Class = () => {
       <h1 className="text-2xl font-bold mb-4 ml-4 mt-6">Students</h1>
       {students !== null ? (
         students.length > 0 ? (
-          <div className="table-auto w-full border-collapse">
+          <div className="table-auto w-full border-collapse mt-6">
             <table className="table w-full">
               <thead>
                 <tr className="bg-gray-200">

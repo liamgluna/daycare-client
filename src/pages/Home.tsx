@@ -51,7 +51,7 @@ const Home = () => {
           <div className="my-8">
             <h1 className="text-2xl font-bold">Dashboard</h1>
           </div>
-          <div className="p-4 rounded-lg shadow-lg flex items-center justify-between w-3/4 my-6">
+          <div className="p-4 rounded-lg shadow-lg flex items-center justify-between w-72 my-6">
             <div>
               <h2 className="card-title text-xl font-bold">Classes</h2>
               <p className="text-xl text-gray-900 font-semibold">
@@ -64,7 +64,7 @@ const Home = () => {
             </div>
             <FaChildren className="text-blue-500 text-5xl" />
           </div>
-          <div className="p-4 rounded-lg shadow-lg flex items-center justify-between w-3/4 my-6">
+          <div className="p-4 rounded-lg shadow-lg flex items-center justify-between w-72 my-6">
             <div>
               <h2 className="card-title text-xl font-bold">Students</h2>
               <p className="text-xl text-gray-900 font-semibold">
@@ -78,7 +78,7 @@ const Home = () => {
             </div>
             <FaSchoolFlag className="text-yellow-500 text-5xl" />
           </div>
-          <div className="p-4 rounded-lg shadow-lg flex items-center justify-between w-3/4 my-6">
+          <div className="p-4 rounded-lg shadow-lg flex items-center justify-between w-72 my-6">
             <div>
               <h2 className="card-title text-xl font-bold">
                 Total Student Attendance

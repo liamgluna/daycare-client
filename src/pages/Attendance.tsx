@@ -87,7 +87,7 @@ const Attendance = () => {
                 </div>
               ))
             ) : (
-              <div className="mx-12 my-8 text-gray-500">No classes found</div>
+              <div className="mx-20 my-8 text-gray-500">No classes found</div>
             )}
           </div>
         </div>
